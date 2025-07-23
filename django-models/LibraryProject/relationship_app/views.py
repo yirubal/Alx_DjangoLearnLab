@@ -1,6 +1,5 @@
 
 from django.shortcuts import render
-from django.views.generic import DetailView
 
 # ✅ Explicitly import Library (and also Book if needed)
 from .models import Book
