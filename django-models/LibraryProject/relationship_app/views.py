@@ -3,7 +3,8 @@ from django.shortcuts import render
 from django.views.generic import DetailView
 
 # ✅ Explicitly import Library (and also Book if needed)
-from .models import Book, Library
+from .models import Book
+from .models import Library
 
 
 def list_books(request):
