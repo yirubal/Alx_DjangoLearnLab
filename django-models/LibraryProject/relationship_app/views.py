@@ -1,7 +1,10 @@
 
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render
 from django.views.generic import DetailView
+
+# ✅ Explicitly import Library (and also Book if needed)
 from .models import Book, Library
+
 
 def list_books(request):
     books = Book.objects.all()
