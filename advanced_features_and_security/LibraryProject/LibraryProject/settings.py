@@ -45,7 +45,7 @@ INSTALLED_APPS = [
 
 ]
 
-AUTH_USER_MODEL = 'relationship_app.CustomUser'
+AUTH_USER_MODEL = 'bookshelf.CustomUser'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
