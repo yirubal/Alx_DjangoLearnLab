@@ -32,13 +32,14 @@ DEBUG = False  # Set to False in production
 SECURE_BROWSER_XSS_FILTER = True
 X_FRAME_OPTIONS = 'DENY'
 SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_SSL_REDIRECT = True
 
 # Cookies over HTTPS only
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
 
 # Optional: Add HSTS (HTTP Strict Transport Security)
-SECURE_HSTS_SECONDS = 3600  # Increase for production
+SECURE_HSTS_SECONDS = 31536000  # Increase for production
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
 
