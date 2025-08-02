@@ -4,6 +4,7 @@ from django.shortcuts import render
 from .models import Book
 from .forms import  SearchForm
 from .forms import SearchForm
+from .forms import ExampleForm
 
 def search_books(request):
     form = SearchForm(request.GET)
