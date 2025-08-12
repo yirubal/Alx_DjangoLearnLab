@@ -1,92 +1,33 @@
-from django.shortcuts import render
-
-# Create your views here.
 from rest_framework import generics, permissions, filters
+from django_filters.rest_framework import DjangoFilterBackend
 from .models import Book
 from .serializers import BookSerializer
-from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
+from .filters import BookFilter
 
 class BookListView(generics.ListAPIView):
     """
-    Read-only list of books with simple filtering:
-      - ?search=<text> (title contains, case-insensitive)
-      - ?author_id=<id>
-      - ?year=<yyyy>
-      - ?year_min=<yyyy>&year_max=<yyyy>
-      - ?ordering=publication_year or -publication_year
+    Read-only list of books with filtering, searching, and ordering.
+
+    Filters (via DjangoFilterBackend):
+      - title: exact / icontains / istartswith
+      - author: exact (author id)
+      - author__name: icontains
+      - publication_year: exact / gte / lte
+      - year_min, year_max: friendly aliases for pub year range
+
+    Search (via SearchFilter):
+      - ?search=<text> matches title and author name (icontains)
+
+    Ordering (via OrderingFilter):
+      - ?ordering=publication_year  or  ?ordering=-publication_year
+      - multiple: ?ordering=publication_year,-title
     """
+    queryset = Book.objects.select_related("author").all()
     serializer_class = BookSerializer
     permission_classes = [permissions.AllowAny]
-    filter_backends = [filters.OrderingFilter]
-    ordering_fields = ["publication_year", "title", "id"]
+
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_class = BookFilter
+    search_fields = ["title", "author__name"]
+    ordering_fields = ["id", "title", "publication_year", "author__name"]
     ordering = ["id"]
-
-    def get_queryset(self):
-        qs = Book.objects.select_related("author").all()
-
-        search = self.request.query_params.get("search")
-        if search:
-            qs = qs.filter(title__icontains=search)
-
-        author_id = self.request.query_params.get("author_id")
-        if author_id:
-            qs = qs.filter(author_id=author_id)
-
-        year = self.request.query_params.get("year")
-        if year:
-            qs = qs.filter(publication_year=year)
-
-        ymin = self.request.query_params.get("year_min")
-        ymax = self.request.query_params.get("year_max")
-        if ymin:
-            qs = qs.filter(publication_year__gte=ymin)
-        if ymax:
-            qs = qs.filter(publication_year__lte=ymax)
-
-        return qs
-
-
-class BookDetailView(generics.RetrieveAPIView):
-    """Read-only detail of a single book."""
-    queryset = Book.objects.select_related("author").all()
-    serializer_class = BookSerializer
-    permission_classes = [permissions.AllowAny]
-
-
-class BookCreateView(generics.CreateAPIView):
-    """
-    Create a new book.
-    Requires authentication.
-    Customizes validation behavior via perform_create.
-    """
-    serializer_class = BookSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-    def perform_create(self, serializer):
-        # Example hook: you could enforce additional business rules here.
-        # The serializer already blocks future years.
-        serializer.save()
-
-
-class BookUpdateView(generics.UpdateAPIView):
-    """
-    Update an existing book (PUT/PATCH).
-    Requires authentication.
-    """
-    queryset = Book.objects.select_related("author").all()
-    serializer_class = BookSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-    def perform_update(self, serializer):
-        # Extra checks could go here (e.g., forbid author changes).
-        serializer.save()
-
-
-class BookDeleteView(generics.DestroyAPIView):
-    """
-    Delete a book.
-    Requires authentication.
-    """
-    queryset = Book.objects.all()
-    serializer_class = BookSerializer
-    permission_classes = [permissions.IsAuthenticated]
