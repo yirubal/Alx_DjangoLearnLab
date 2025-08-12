@@ -41,6 +41,17 @@ INSTALLED_APPS = [
       "api",
 
 ]
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.SessionAuthentication",
+        "rest_framework.authentication.BasicAuthentication",
+    ],
+    # Optional: If you set this globally, unsafe methods require auth by default.
+    # "DEFAULT_PERMISSION_CLASSES": [
+    #     "rest_framework.permissions.IsAuthenticatedOrReadOnly",
+    # ],
+}
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
