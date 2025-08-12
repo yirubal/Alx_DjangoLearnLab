@@ -4,11 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1c3f9b9d-14f9-457a-ab44-f03d8a9183ce" name="Changes" comment="update URL patterns in `api/urls.py` to comply with checker requirements">
-      <change afterPath="$PROJECT_DIR$/api/filters.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/advanced_api_project/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/advanced_api_project/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/views.py" afterDir="false" />
+    <list default="true" id="1c3f9b9d-14f9-457a-ab44-f03d8a9183ce" name="Changes" comment="import `django_filters.rest_framework` to support filtering in BookListView">
+      <change afterPath="$PROJECT_DIR$/api/test_views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -110,13 +107,31 @@
       <option name="project" value="LOCAL" />
       <updated>1755035068513</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="add filtering, searching, and ordering support to book API views using Django Filters and DRF backend configurations">
+      <option name="closed" value="true" />
+      <created>1755035698017</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1755035698017</updated>
+    </task>
+    <task id="LOCAL-00007" summary="import `django_filters.rest_framework` to support filtering in BookListView">
+      <option name="closed" value="true" />
+      <created>1755035876302</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1755035876302</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="add advanced_api_project with initial setup, including API app, models, serializers, admin configurations, and migrations" />
     <MESSAGE value="add REST framework configuration, API index view, API URL patterns, and basic book views" />
     <MESSAGE value="update URL patterns in `api/urls.py` to comply with checker requirements" />
-    <option name="LAST_COMMIT_MESSAGE" value="update URL patterns in `api/urls.py` to comply with checker requirements" />
+    <MESSAGE value="add filtering, searching, and ordering support to book API views using Django Filters and DRF backend configurations" />
+    <MESSAGE value="import `django_filters.rest_framework` to support filtering in BookListView" />
+    <option name="LAST_COMMIT_MESSAGE" value="import `django_filters.rest_framework` to support filtering in BookListView" />
   </component>
 </project>
