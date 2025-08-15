@@ -1,7 +1,9 @@
 {% extends "blog/base.html" %}
 {% block title %}Login · Django Blog{% endblock %}
 {% block content %}
+<div class="auth-page">
   <h2>Login</h2>
+  <div class="auth-card">
   <form method="post" action="">
     {% csrf_token %}
     {{ form.non_field_errors }}
@@ -20,5 +22,7 @@
       <input type="hidden" name="next" value="{{ next }}">
     {% endif %}
   </form>
+  </div>
+</div>
 {% endblock %}
 
