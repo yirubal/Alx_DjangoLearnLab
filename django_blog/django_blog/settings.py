@@ -84,7 +84,9 @@ LOGOUT_REDIRECT_URL = "blog:login" #after logout, go to login
 #     BASE_DIR / "static",
 # ]
 
-
+# django_blog/settings.py
+STATIC_URL = "/static/"
+STATICFILES_DIRS = [BASE_DIR / "static"]  # <-- project-level static dir
 
 WSGI_APPLICATION = 'django_blog.wsgi.application'
 
