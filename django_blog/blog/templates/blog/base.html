@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -8,15 +8,34 @@
 </head>
 <body>
     <header>
-        <nav>
-            <ul>
-                <li><a href="{% url 'home' %}">Home</a></li>
-                <li><a href="{% url 'posts' %}">Blog Posts</a></li>
-                <li><a href="{% url 'login' %}">Login</a></li>
-                <li><a href="{% url 'register' %}">Register</a></li>
-            </ul>
-        </nav>
-    </header>
+    <nav>
+      <ul>
+        <li><a href="{% url 'blog:home' %}">Home</a></li>
+
+        {% if request.user.is_authenticated %}
+          <li><a href="{% url 'blog:profile' %}">Profile</a></li>
+          <li>
+            <form action="{% url 'blog:logout' %}" method="post" style="display:inline">
+              {% csrf_token %}
+              <button type="submit">Logout</button>
+            </form>
+          </li>
+        {% else %}
+          <li><a href="{% url 'blog:login' %}">Login</a></li>
+          <li><a href="{% url 'blog:register' %}">Register</a></li>
+        {% endif %}
+      </ul>
+    </nav>
+  </header>
+
+      <!-- Flash messages -->
+  {% if messages %}
+    <ul class="messages">
+      {% for message in messages %}
+        <li class="message {{ message.tags }}">{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
 
     <div class="content">
         {% block content %}

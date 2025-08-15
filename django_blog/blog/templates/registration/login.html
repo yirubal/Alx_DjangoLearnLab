@@ -1,0 +1,24 @@
+{% extends "blog/base.html" %}
+{% block title %}Login · Django Blog{% endblock %}
+{% block content %}
+  <h2>Login</h2>
+  <form method="post" action="">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    <div>
+      <label>Username</label>
+      {{ form.username }}
+      {{ form.username.errors }}
+    </div>
+    <div>
+      <label>Password</label>
+      {{ form.password }}
+      {{ form.password.errors }}
+    </div>
+    <button type="submit">Login</button>
+    {% if next %}
+      <input type="hidden" name="next" value="{{ next }}">
+    {% endif %}
+  </form>
+{% endblock %}
+

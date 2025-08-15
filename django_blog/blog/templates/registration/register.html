@@ -1,0 +1,43 @@
+{% extends "blog/base.html" %}
+{% block title %}Register · Django Blog{% endblock %}
+{% block content %}
+  <h2>Create an account</h2>
+  <form method="post" action="">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    <div>
+      <label>Username</label>
+      {{ form.username }}
+      {{ form.username.errors }}
+    </div>
+    <div>
+      <label>Email</label>
+      {{ form.email }}
+      {{ form.email.errors }}
+    </div>
+    <div>
+
+      <div>
+      <label>First Name</label>
+      {{ form.first_name }}
+      {{ form.first_name.errors }}
+    </div>
+       <div>
+      <label>Last Name</label>
+      {{ form.last_name }}
+      {{ form.last_name.errors }}
+    </div>
+    <div>
+    <div>
+      <label>Password</label>
+      {{ form.password1 }}
+      {{ form.password1.errors }}
+    </div>
+    <div>
+      <label>Confirm Password</label>
+      {{ form.password2 }}
+      {{ form.password2.errors }}
+    </div>
+    <button type="submit">Register</button>
+  </form>
+{% endblock %}
