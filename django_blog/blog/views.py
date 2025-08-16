@@ -7,6 +7,7 @@ from rest_framework.reverse import reverse_lazy
 from django.contrib import messages
 from blog.forms import CustomUserCreationForm, ProfileUpdateForm, PostForm
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.decorators import login_required
 from blog.models import Post
 
 
