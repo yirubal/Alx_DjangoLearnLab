@@ -77,20 +77,18 @@ class PostDetailView(DetailView):
         return ctx
 
 @login_required
-def add_comment(request: HttpRequest, post_id: int):
-    post = get_object_or_404(Post, pk=post_id)
-    # explicit check so checker sees "POST" and "method"
+def add_comment(request, pk: int):
+    post = get_object_or_404(Post, pk=pk)
     if request.method == "POST":
         form = CommentForm(request.POST)
         if form.is_valid():
-            comment = form.save(commit=False)  # checker sees save()
+            comment = form.save(commit=False)
             comment.post = post
             comment.author = request.user
-            comment.save()                     # checker sees save()
+            comment.save()
             messages.success(request, "Comment added.")
-            return redirect("blog:post-detail", pk=post.pk)
-        messages.error(request, "Please correct the errors in your comment.")
-    # GET or invalid POST → back to detail
+        else:
+            messages.error(request, "Please correct the errors in your comment.")
     return redirect("blog:post-detail", pk=post.pk)
 
 # --- permissions mixin for comment owner ---

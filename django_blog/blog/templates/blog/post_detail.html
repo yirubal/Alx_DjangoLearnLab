@@ -7,6 +7,13 @@
     <h2>{{ post.title }}</h2>
     <p><small>by {{ post.author }} · {{ post.published_date|date:"Y-m-d H:i" }}</small></p>
     <div>{{ post.content|linebreaks }}</div>
+
+      {% if request.user  == post.author%}
+      <li>
+           <a href="{% url 'blog:post-update' post.pk %}">Edit</a>
+          <a href="{% url 'blog:post-delete'  post.pk %}">Delete</a>
+      </li>
+       {% endif %}
   </article>
 
   <hr>
@@ -38,12 +45,9 @@
       <form method="post" action="{% url 'blog:comment-create' post.pk %}">
         {% csrf_token %}
         {{ comment_form.non_field_errors }}
-        <div>
-          {{ comment_form.content }}
-          {{ comment_form.content.errors }}
-        </div>
-        <button type="submit">Post Comment</button>
-      </form>
+        {{ comment_form.content }} {{ comment_form.content.errors }}
+       <button type="submit">Post Comment</button>
+</form>
     </section>
   {% else %}
     <p><a href="{% url 'blog:login' %}?next={{ request.path }}">Log in</a> to comment.</p>
