@@ -1,0 +1,15 @@
+
+{% extends "blog/base.html" %}
+{% block title %}Home · Django Blog{% endblock %}
+{% block content %}
+  <h2>Post List</h2>
+
+  {% if request.user.is_authenticated %}
+    <p><a href="{% url 'blog:post-form' %}">+ New Post</a></p>
+  {% endif %}
+ {% for post in posts %}
+<div class="blog-con">
+  <h2><a href="{% url 'blog:post-detail' post.pk %}">{{ post.title }}</a></h2>
+</div>
+{% endfor %}
+{% endblock %}

@@ -2,6 +2,8 @@ from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
 
+from blog.models import Post
+
 User = get_user_model()
 
 class CustomUserCreationForm(UserCreationForm):
@@ -39,3 +41,8 @@ class ProfileUpdateForm(forms.ModelForm):
         if qs.exists():
             raise forms.ValidationError("That email is already in use.")
         return email
+
+class PostForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        fields = ('title', 'content')
