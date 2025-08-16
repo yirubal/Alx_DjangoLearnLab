@@ -1,18 +1,51 @@
-<!-- templates/post_detail.html -->
-{% extends 'blog/base.html' %}
+
+
+{% extends "blog/base.html" %}
+{% block title %}{{ post.title }} · Django Blog{% endblock %}
 {% block content %}
-<div class="post-entry">
+  <article>
+    <h2>{{ post.title }}</h2>
+    <p><small>by {{ post.author }} · {{ post.published_date|date:"Y-m-d H:i" }}</small></p>
+    <div>{{ post.content|linebreaks }}</div>
+  </article>
 
-<h2>{{ post.title }}</h2>
-<p>{{ post.content }}</p>
-    <p><small>By: </small>{{ post.author }}</p>
+  <hr>
 
+  <section>
+    <h3>Comments ({{ comments|length }})</h3>
 
-    {% if request.user == post.author %}
-    <p>
-    <a href="{% url 'blog:post-update' post.pk %}">Edit</a>
-    <a href="{% url 'blog:post-delete' post.pk %}">Delete</a>
-    </p>
+    {% if comments %}
+      <ul>
+        {% for c in comments %}
+          <li>
+            <p>{{ c.content|linebreaks }}</p>
+            <small>{{ c.author }} · {{ c.created_at|date:"Y-m-d H:i" }}</small>
+            {% if request.user.id == c.author_id %}
+              · <a href="{% url 'blog:comment-update' c.pk %}">Edit</a>
+              · <a href="{% url 'blog:comment-delete' c.pk %}">Delete</a>
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>No comments yet.</p>
+    {% endif %}
+  </section>
+
+  {% if request.user.is_authenticated %}
+    <section style="margin-top:1rem">
+      <h4>Add a comment</h4>
+      <form method="post" action="{% url 'blog:comment-create' post.pk %}">
+        {% csrf_token %}
+        {{ comment_form.non_field_errors }}
+        <div>
+          {{ comment_form.content }}
+          {{ comment_form.content.errors }}
+        </div>
+        <button type="submit">Post Comment</button>
+      </form>
+    </section>
+  {% else %}
+    <p><a href="{% url 'blog:login' %}?next={{ request.path }}">Log in</a> to comment.</p>
   {% endif %}
-</div>
-{% endblock content %}
+{% endblock %}
