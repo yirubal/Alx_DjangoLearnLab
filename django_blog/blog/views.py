@@ -12,7 +12,7 @@ from blog.forms import CustomUserCreationForm, ProfileUpdateForm
 # Create your views here.
 
 class RegisterView(CreateView):
-    template_name = 'registration/register.html'
+    template_name = 'blog/register.html'
     form_class = CustomUserCreationForm
     success_url = reverse_lazy("blog:login")
 
@@ -21,7 +21,7 @@ class RegisterView(CreateView):
         return super().form_valid(form)
 
 class ProfileView(LoginRequiredMixin, UpdateView):
-    template_name = "blog/pages/profile.html"
+    template_name = "blog/profile.html"
     form_class = ProfileUpdateForm
     success_url = reverse_lazy("blog:profile")
 
@@ -35,5 +35,5 @@ class ProfileView(LoginRequiredMixin, UpdateView):
 
 
 class HomeView(TemplateView):
-    template_name = 'blog/pages/home.html'
+    template_name = 'blog/home.html'
 
