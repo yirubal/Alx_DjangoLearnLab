@@ -4,12 +4,14 @@ from django.contrib.auth import get_user_model
 
 class UserSerializer(serializers.ModelSerializer):
     # Specify the password field explicitly as CharField (since it's required)
-
+    username = serializers.CharField(required=True)
+    email = serializers.EmailField(required=True)
+    password = serializers.CharField(write_only=True, required=True)
 
     class Meta:
         model = get_user_model()
         fields = ('username', 'email', 'bio', 'profile_pic', 'password')
-        password = serializers.CharField(write_only=True, required=True)
+
 
     def create(self, validated_data):
         # Use get_user_model().objects.create_user for better compatibility
