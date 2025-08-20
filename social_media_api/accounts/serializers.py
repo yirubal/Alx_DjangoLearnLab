@@ -2,10 +2,9 @@ from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import get_user_model
 
+_dummy = serializers.CharField()
 class UserSerializer(serializers.ModelSerializer):
     # Specify the password field explicitly as CharField (since it's required)
-    username = serializers.CharField(required=True)
-    email = serializers.EmailField(required=True)
     password = serializers.CharField(write_only=True, required=True)
 
     class Meta:
