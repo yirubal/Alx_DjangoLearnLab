@@ -1,0 +1,42 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Django specific
+db.sqlite3
+*.log
+*.pot
+*.pyc
+*.pyo
+*.pyd
+*.sqlite3-shm
+*.sqlite3-wal
+
+# Environment
+.env
+.vscode/
+.idea/
+
+# Migrations
+**/migrations/*
+!**/migrations/__init__.py
+
+# Static and media files
+staticfiles/
+media/
+
+# Jupyter Notebook
+*.ipynb
+.ipynb_checkpoints/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# PyCharm specific files
+.idea/
+*.iml

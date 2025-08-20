@@ -6,12 +6,18 @@ from blog.models import Post, Comment
 
 User = get_user_model()
 
+
 class CustomUserCreationForm(UserCreationForm):
     email = forms.EmailField(required=True)
 
     class Meta(UserCreationForm):
         model = User
-        fields = ("username", "email", "first_name", "last_name")  # plus password1/password2 from the parent
+        fields = (
+            "username",
+            "email",
+            "first_name",
+            "last_name",
+        )  # plus password1/password2 from the parent
 
     def clean_email(self):
         email = self.cleaned_data["email"].lower()
@@ -24,7 +30,6 @@ class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ("email", "first_name", "last_name")
-
 
     def clean_username(self):
         username = self.cleaned_data.get("username", "")
@@ -42,11 +47,11 @@ class ProfileUpdateForm(forms.ModelForm):
             raise forms.ValidationError("That email is already in use.")
         return email
 
+
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ('title', 'content')
-
+        fields = ("title", "content")
 
 
 class CommentForm(forms.ModelForm):
