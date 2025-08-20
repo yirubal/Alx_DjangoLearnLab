@@ -24,10 +24,11 @@ class UserLoginView(APIView):
     def post(self, request):
         user = authenticate(username=request.data['username'], password=request.data['password'])
         if user:
-            token, created = Token.objects.get_or_create(user=user)
-            return Response('token', token.key)
+             taken = Token.objects.get(user=user)
+             return Response({'token': taken.key})
         else:
-            return Response({'error': 'Invalid credentials'}, status=401)
+            return Response({'error': 'Invalid Credentials'})
+
 
 class UserProfileView(generics.RetrieveUpdateAPIView):
 
