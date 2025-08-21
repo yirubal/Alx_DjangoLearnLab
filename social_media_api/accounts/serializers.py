@@ -9,7 +9,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = get_user_model()
-        fields = ('username', 'email', 'bio', 'profile_pic', 'password')
+        fields = ('username', 'email', 'bio', 'profile_picture', 'password')
 
 
     def create(self, validated_data):
@@ -20,7 +20,7 @@ class UserSerializer(serializers.ModelSerializer):
             password=validated_data['password']
         )
         user.bio = validated_data.get('bio', '')
-        user.profile_pic = validated_data.get('profile_pic', None)
+        user.profile_picture = validated_data.get('profile_picture', None)
         user.save()
 
         # Create a token for the user
