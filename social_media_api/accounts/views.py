@@ -66,3 +66,45 @@ class UserProfileView(generics.RetrieveUpdateAPIView):
         return CustomUser.objects.get(pk=user_id)
 
 
+class FollowUser(APIView):
+    permission_classes = [IsAuthenticated]
+    # authentication_classes = []
+
+    def post(self, request, pk):
+        try:
+            user = CustomUser.objects.get(pk=pk)
+        except CustomUser.DoesNotExist:
+            return Response({"error": "User not found."}, status=404)
+        except CustomUser.MultipleObjectsReturned:
+            return Response({"error": "Multiple users found"}, status=400)
+
+        if request.user.pk == pk:
+            return Response({"error": "You cannot follow yourself."}, status=400)
+        request.user.following.add(user)
+        request.user.save()
+
+        return Response({"message": "User followed successfully."})
+
+
+class UnfollowUser(APIView):
+    permission_classes = [IsAuthenticated]
+    # authentication_classes = [TokenAuthentication]
+
+
+
+    def post(self, request, pk):
+        try:
+            user = CustomUser.objects.get(pk=pk)
+        except CustomUser.DoesNotExist:
+            return Response({"error": "User not found."}, status=404)
+        except CustomUser.MultipleObjectsReturned:
+            return Response({"error": "Multiple users found"}, status=400)
+
+        if request.user.pk == pk:
+            return Response({"error": "You cannot unfollow yourself."}, status=400)
+
+        request.user.following.remove(user)
+        request.user.save()
+        return Response({"message": "User unfollowed successfully."})
+
+

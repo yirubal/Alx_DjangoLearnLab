@@ -73,5 +73,25 @@ class CommentViewSet(viewsets.ModelViewSet):
 #     permission_classes = [IsAuthorOrReadOnly]
 #     queryset = Comment.objects.all()
 #     serializer_class = CommentSerializer
+#  following_users = request.user.following.all()
+
+
+class FeedView(generics.ListAPIView):
+    serializer_class = PostSerializer
+    permission_classes = (IsAuthenticatedOrReadOnly,)
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    search_fields = ['title', 'content']
+
+    def get_queryset(self):
+        # Get the list of users the current user is following
+        if self.request.user.is_authenticated:
+            following_users = self.request.user.following.all()
+            return Post.objects.filter(author__in=following_users).order_by('-created_at')[:10]
+        else:
+            # Return an empty queryset for anonymous users
+            return Post.objects.none()
+
+
+
 
 
