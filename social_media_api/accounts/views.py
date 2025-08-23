@@ -70,15 +70,15 @@ class FollowUser(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
     # authentication_classes = []
 
-    def post(self, request, pk):
+    def post(self, request, user_id):
         try:
-            user = CustomUser.objects.get(pk=pk)
+            user = CustomUser.objects.get(pk=user_id)
         except CustomUser.DoesNotExist:
             return Response({"error": "User not found."}, status=404)
         except CustomUser.MultipleObjectsReturned:
             return Response({"error": "Multiple users found"}, status=400)
 
-        if request.user.pk == pk:
+        if request.user.pk == user_id:
             return Response({"error": "You cannot follow yourself."}, status=400)
         request.user.following.add(user)
         request.user.save()
@@ -92,15 +92,15 @@ class UnfollowUser(generics.GenericAPIView):
 
 
 
-    def post(self, request, pk):
+    def post(self, request, user_id):
         try:
-            user = CustomUser.objects.get(pk=pk)
+            user = CustomUser.objects.get(pk=user_id)
         except CustomUser.DoesNotExist:
             return Response({"error": "User not found."}, status=404)
         except CustomUser.MultipleObjectsReturned:
             return Response({"error": "Multiple users found"}, status=400)
 
-        if request.user.pk == pk:
+        if request.user.pk == user_id:
             return Response({"error": "You cannot unfollow yourself."}, status=400)
 
         request.user.following.remove(user)
