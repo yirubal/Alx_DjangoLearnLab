@@ -66,7 +66,7 @@ class UserProfileView(generics.RetrieveUpdateAPIView):
         return CustomUser.objects.get(pk=user_id)
 
 
-class FollowUser(APIView):
+class FollowUser(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
     # authentication_classes = []
 
@@ -86,7 +86,7 @@ class FollowUser(APIView):
         return Response({"message": "User followed successfully."})
 
 
-class UnfollowUser(APIView):
+class UnfollowUser(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
     # authentication_classes = [TokenAuthentication]
 
