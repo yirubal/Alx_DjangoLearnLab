@@ -1,5 +1,5 @@
 from django.core.exceptions import ValidationError
-from rest_framework import  filters, viewsets, generics
+from rest_framework import filters, viewsets, generics, permissions
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
@@ -78,7 +78,7 @@ class CommentViewSet(viewsets.ModelViewSet):
 
 class FeedView(generics.ListAPIView):
     serializer_class = PostSerializer
-    permission_classes = (IsAuthenticatedOrReadOnly,)
+    permission_classes = [permissions.IsAuthenticated]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     search_fields = ['title', 'content']
 
