@@ -3,7 +3,7 @@ from contextvars import Token
 from django.contrib.auth import authenticate
 from requests import Response
 # Create your views here.
-from rest_framework import generics, status
+from rest_framework import generics, status, permissions
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.exceptions import PermissionDenied
 
@@ -67,7 +67,7 @@ class UserProfileView(generics.RetrieveUpdateAPIView):
 
 
 class FollowUser(generics.GenericAPIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     # authentication_classes = []
 
     def post(self, request, pk):
@@ -87,7 +87,7 @@ class FollowUser(generics.GenericAPIView):
 
 
 class UnfollowUser(generics.GenericAPIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     # authentication_classes = [TokenAuthentication]
 
 
