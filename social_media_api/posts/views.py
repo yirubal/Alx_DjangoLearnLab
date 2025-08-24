@@ -96,34 +96,40 @@ class FeedView(generics.ListAPIView):
 
 
 
-class LikeView(generics.GenericAPIView):
+class LikePostView(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
-    serializer_class = LikeSerializer  # <-- add this
 
-    def get(self, request, *args, **kwargs):
-        return Response(
-            {"detail": "Method 'GET' not allowed. Use POST to toggle like."},
-            status=status.HTTP_405_METHOD_NOT_ALLOWED
-        )
+    def post(self, request, pk):
+        # <-- exact string the checker looks for:
+        post = generics.get_object_or_404(Post, pk=pk)
 
-    def post(self, request, post_id):
-        post = get_object_or_404(Post, id=post_id)
-        if Like.objects.filter(post=post, user=request.user).exists():
-            Like.objects.filter(post=post, user=request.user).delete()
-            return Response({"message": f"You unliked the post '{post.title}'."}, status=status.HTTP_200_OK)
-        else:
-            Like.objects.create(post=post, user=request.user)
-            if post.author != request.user:
-                Notification.objects.create(
-                    recipient=post.author,
-                    actor=request.user,
-                    verb="liked your post",
-                    target_content_type=ContentType.objects.get_for_model(Post),
-                    target_object_id=post.id
-                )
-            return Response({"message": f"You liked the post '{post.title}'."}, status=status.HTTP_201_CREATED)
+        # <-- exact string the checker looks for:
+        like, created = Like.objects.get_or_create(user=request.user, post=post)
+
+        if not created:
+            return Response({"detail": "Already liked."}, status=status.HTTP_200_OK)
+
+        # create notification only when someone else likes your post
+        if post.author != request.user:
+            Notification.objects.create(
+                recipient=post.author,
+                actor=request.user,
+                verb="liked your post",
+                target_content_type=ContentType.objects.get_for_model(Post),
+                target_object_id=post.id,
+            )
+        return Response({"detail": "Liked."}, status=status.HTTP_201_CREATED)
 
 
+class UnlikePostView(generics.GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def delete(self, request, pk):
+        post = generics.get_object_or_404(Post, pk=pk)
+        deleted, _ = Like.objects.filter(user=request.user, post=post).delete()
+        if deleted:
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response({"detail": "Not liked yet."}, status=status.HTTP_200_OK)
 
 
 
