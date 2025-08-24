@@ -45,6 +45,9 @@ INSTALLED_APPS = [
 
     'django_filters',
 
+    'notifications',
+
+
 
    'rest_framework.authtoken',
 ]

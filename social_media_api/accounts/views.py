@@ -1,11 +1,13 @@
 from contextvars import Token
 
 from django.contrib.auth import authenticate
+from django.contrib.contenttypes.models import ContentType
 from requests import Response
 # Create your views here.
 from rest_framework import generics, status, permissions
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.exceptions import PermissionDenied
+from rest_framework.generics import get_object_or_404
 
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
@@ -14,6 +16,9 @@ from rest_framework.authtoken.models import Token
 
 from accounts.models import CustomUser
 from accounts.serializers import UserSerializer
+from notifications.models import Notification
+from posts.models import Post, Like
+
 
 class UserRegistrationView(generics.CreateAPIView):
     serializer_class = UserSerializer

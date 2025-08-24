@@ -1,11 +1,14 @@
+from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
-from rest_framework import filters, viewsets, generics, permissions
+from rest_framework import filters, viewsets, generics, permissions, status
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.response import Response
 
+from notifications.models import Notification
 from posts.permissions import  IsAuthorOrReadOnly
-from posts.models import Post, Comment
-from posts.serializers import PostSerializer, CommentSerializer
+from posts.models import Post, Comment, Like
+from posts.serializers import PostSerializer, CommentSerializer, LikeSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 
 
@@ -90,6 +93,38 @@ class FeedView(generics.ListAPIView):
         else:
             # Return an empty queryset for anonymous users
             return Post.objects.none()
+
+
+
+class LikeView(generics.GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = LikeSerializer  # <-- add this
+
+    def get(self, request, *args, **kwargs):
+        return Response(
+            {"detail": "Method 'GET' not allowed. Use POST to toggle like."},
+            status=status.HTTP_405_METHOD_NOT_ALLOWED
+        )
+
+    def post(self, request, post_id):
+        post = get_object_or_404(Post, id=post_id)
+        if Like.objects.filter(post=post, user=request.user).exists():
+            Like.objects.filter(post=post, user=request.user).delete()
+            return Response({"message": f"You unliked the post '{post.title}'."}, status=status.HTTP_200_OK)
+        else:
+            Like.objects.create(post=post, user=request.user)
+            if post.author != request.user:
+                Notification.objects.create(
+                    recipient=post.author,
+                    actor=request.user,
+                    verb="liked your post",
+                    target_content_type=ContentType.objects.get_for_model(Post),
+                    target_object_id=post.id
+                )
+            return Response({"message": f"You liked the post '{post.title}'."}, status=status.HTTP_201_CREATED)
+
+
+
 
 
 
